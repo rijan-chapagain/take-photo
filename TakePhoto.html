@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>Take Photo</title>
+</head>
+<body>
+   
+    <div class="video-wrap">
+        <video id="video" playinline autoplay></video>
+    </div>
+    <div class="controller">
+        <button id="snap">Capture</button>
+    </div>
+
+    <canvas id="canvas" width="640" height="480"></canvas>
+<script>
+'use strict';
+
+const video = document.getElementById('video');
+const snap = document.getElementById('snap');
+const canvas = document.getElementById('canvas');
+const spanErrMsg = document.getElementById('spanErrMsg');
+
+const constrains = {
+    audio: true,
+    video: {
+        width: 1280, height: 720
+
+    }
+};
+
+async function init(){
+    try{
+        const stream = await navigator.mediaDevices.getUserMedia(constrains);
+        handleSuccess(stream);
+    }
+    catch(e){
+        spanErrMsg.innerHTML = `navigation.getUserMedia.console.error: ${e.toString()}`;
+    }
+}
+
+function handleSuccess(stream)
+{
+    window.stream = stream;
+    video.srcObject = stream;
+}
+
+init();
+
+var contex = canvas.getContext('2d');
+snap.addEventListener("click", function(){
+    contex.drawImage(video, 0,0,640,480);
+});
+
+
+</script>
+
+</body>
+</html>
